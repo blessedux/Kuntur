@@ -1,0 +1,42 @@
+---
+import { Card } from "./ui/Card"
+import { CardContent } from "./ui/CardContent"
+
+const DESTINATIONS = [
+  { src: "/natales.jpg", alt: "Natales", caption: "Puerto Natales" },
+  { src: "/calafate.jpg", alt: "Calafate", caption: "El Calafate" },
+  { src: "/ushuaia.jpg", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego" },
+  { src: "/reserva.jpg", alt: "Reserva Magallanes", caption: "Reserva Magallanes" },
+  { src: "/aeropuerto.jpg", alt: "Aeropuerto", caption: "Aeropuerto" },
+  { src: "/fuerte-bulnes.jpg", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes" },
+];
+---
+<section class="relative mt-0 py-16 bg-gray-50">
+  {/* Header */}
+  <div class="text-center relative">
+    <h2 class="text-2xl font-bold text-gray-900">Descubre Nuestros Destinos</h2>
+    <p class="text-md text-gray-600">
+      Conoce los lugares más emblemáticos de la Patagonia
+    </p>
+  </div>
+
+  {/* Cards */}
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {DESTINATIONS.map((destination, index) => (
+      <Card key={index} class="overflow-hidden shadow-lg">
+        <CardContent class="p-0">
+          <img
+            src={destination.src}
+            alt={destination.alt}
+            width="400"
+            height="300"
+            class="w-full h-56 object-cover"
+          />
+          <div class="p-4 bg-white">
+            <p class="font-medium text-lg text-gray-800">{destination.caption}</p>
+          </div>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+</section>
