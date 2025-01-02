@@ -3,40 +3,44 @@ import { Card } from "./ui/Card"
 import { CardContent } from "./ui/CardContent"
 
 const DESTINATIONS = [
-  { src: "/natales.jpg", alt: "Natales", caption: "Puerto Natales" },
-  { src: "/calafate.jpg", alt: "Calafate", caption: "El Calafate" },
-  { src: "/ushuaia.jpg", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego" },
-  { src: "/reserva.jpg", alt: "Reserva Magallanes", caption: "Reserva Magallanes" },
-  { src: "/aeropuerto.jpg", alt: "Aeropuerto", caption: "Aeropuerto" },
-  { src: "/fuerte-bulnes.jpg", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes" },
+  { src: "src/assets/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899", },
+  { src: "src/assets/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899", },
+  { src: "src/assets/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899", },
+  { src: "src/assets/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899", },
+  { src: "src/assets/img/punta-arenas.webp", alt: "Reserva Magallanes", caption: "Dentro de la ciudad", price: "$1899", },
+  { src: "src/assets/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto", price: "$1899", },
+  { src: "src/assets/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899", },
 ];
 ---
 <section class="relative mt-0 py-16 bg-gray-50">
   {/* Header */}
   <div class="text-center relative">
-    <h2 class="text-2xl font-bold text-gray-900">Descubre Nuestros Destinos</h2>
+    <h2 class="text-2xl font-bold text-gray-900">Reserva ahora tu transporte privado</h2>
     <p class="text-md text-gray-600">
-      Conoce los lugares más emblemáticos de la Patagonia
+        Sabemos que necesitas un transporte confiable, rápido y seguro.
     </p>
   </div>
-
+  <div class="px-4">
   {/* Cards */}
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
     {DESTINATIONS.map((destination, index) => (
-      <Card key={index} class="overflow-hidden shadow-lg">
-        <CardContent class="p-0">
+      <Card key={index} class="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+         <div class="relative w-full h-56">
           <img
             src={destination.src}
             alt={destination.alt}
-            width="400"
-            height="300"
-            class="w-full h-56 object-cover"
+            class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
           />
-          <div class="p-4 bg-white">
-            <p class="font-medium text-lg text-gray-800">{destination.caption}</p>
+          </div>
+          <CardContent class="p-4 bg-white rounded-b-lg">
+          <p class="text-gray-800 font-medium mb-1">{destination.caption}</p>
+          <div class="flex justify-between items-center">
+            <p class="text-sm text-gray-500">Precio</p>
+            <p class="text-lg font-bold text-gray-800">{destination.price}</p>
           </div>
         </CardContent>
       </Card>
     ))}
+  </div>
   </div>
 </section>
