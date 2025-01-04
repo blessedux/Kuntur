@@ -1,46 +1,125 @@
 ---
-import { Card } from "./ui/Card"
-import { CardContent } from "./ui/CardContent"
+import { Card } from "./ui/Card";
 
 const DESTINATIONS = [
-  { src: "src/assets/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899", },
-  { src: "src/assets/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899", },
-  { src: "src/assets/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899", },
-  { src: "src/assets/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899", },
-  { src: "src/assets/img/punta-arenas.webp", alt: "Reserva Magallanes", caption: "Dentro de la ciudad", price: "$1899", },
-  { src: "src/assets/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto", price: "$1899", },
-  { src: "src/assets/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899", },
+{ src: "src/assets/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899" },
+  { src: "src/assets/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899" },
+  { src: "src/assets/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899" },
+  { src: "src/assets/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899" },
+  { src: "src/assets/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto", price: "$1899" },
+  { src: "src/assets/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899" },
+  { src: "src/assets/img/punta-arenas.webp", alt: "Punta Arenas", caption: "Punta Arenas", price: "$1899" }
 ];
+
 ---
+
 <section class="relative mt-0 py-16 bg-gray-50">
-  {/* Header */}
+  <!-- Header -->
   <div class="text-center relative">
     <h2 class="text-2xl font-bold text-gray-900">Reserva ahora tu transporte privado</h2>
-    <p class="text-md text-gray-600">
-        Sabemos que necesitas un transporte confiable, rápido y seguro.
-    </p>
+    <p class="text-md text-gray-600">Sabemos que necesitas un transporte confiable, rápido y seguro.</p>
   </div>
+
   <div class="px-4">
-  {/* Cards */}
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    {DESTINATIONS.map((destination, index) => (
-      <Card key={index} class="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-         <div class="relative w-full h-56">
-          <img
-            src={destination.src}
-            alt={destination.alt}
-            class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
-          />
+    <!-- Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {DESTINATIONS.map((destination, index) => (
+        <Card
+          key={index}
+          class="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+          on:click={() => openModal(destination.caption)}
+        >
+          <div class="relative w-full h-56">
+            <img
+              src={destination.src}
+              alt={destination.alt}
+              class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
+            />
           </div>
-          <CardContent class="p-4 bg-white rounded-b-lg">
-          <p class="text-gray-800 font-medium mb-1">{destination.caption}</p>
-          <div class="flex justify-between items-center">
-            <p class="text-sm text-gray-500">Precio</p>
-            <p class="text-lg font-bold text-gray-800">{destination.price}</p>
+          <div class="p-4 bg-white rounded-b-lg">
+            <p class="text-gray-800 font-medium mb-1">{destination.caption}</p>
+            <div class="flex justify-between items-center">
+              <p class="text-sm text-gray-500">Precio</p>
+              <p class="text-lg font-bold text-gray-800">{destination.price}</p>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    ))}
+        </Card>
+      ))}
+    </div>
   </div>
+
+  <!-- Modal -->
+  <div
+    id="popup-form-modal"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden"
+  >
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <header class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">Reserva tu viaje</h2>
+        <button
+          class="text-gray-500 hover:text-gray-800"
+          onclick="closeModal()"
+        >
+          ✖
+        </button>
+      </header>
+      <form class="space-y-4">
+        <div>
+          <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
+          <input
+            id="origin"
+            type="text"
+            class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+            placeholder="Ingrese su origen"
+          />
+        </div>
+        <div>
+          <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
+          <input
+            id="destination"
+            type="text"
+            class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+            value=""
+            readonly
+          />
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-700">Fecha</label>
+          <input
+            id="date"
+            type="date"
+            class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <button
+          type="button"
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          onclick="submitForm()"
+        >
+          Reservar
+        </button>
+      </form>
+    </div>
   </div>
 </section>
+
+<script>
+  function openModal(destination) {
+    console.log("openModal triggered for:", destination); // Debug log
+    const modal = document.getElementById("popup-form-modal");
+    const destinationInput = document.getElementById("destination");
+
+    if (modal && destinationInput) {
+      destinationInput.value = destination;
+      modal.classList.remove("hidden"); // Show the modal
+    } else {
+      console.error("Modal or destination input not found");
+    }
+  }
+
+  function closeModal() {
+    console.log("closeModal triggered"); // Debug log
+    const modal = document.getElementById("popup-form-modal");
+    if (modal) modal.classList.add("hidden");
+  }
+</script>

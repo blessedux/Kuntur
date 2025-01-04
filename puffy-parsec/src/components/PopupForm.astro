@@ -1,0 +1,78 @@
+---
+export let isOpen = false;
+export let destination = ""; // Destination to display dynamically
+---
+
+<div
+  id="popup-form-modal"
+  class={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 ${
+    isOpen ? "" : "hidden"
+  }`}
+>
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <header class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-bold">Reserva tu viaje</h2>
+      <button
+        class="text-gray-500 hover:text-gray-800"
+        onclick="closeModal()"
+      >
+        ✖
+      </button>
+    </header>
+    <form class="space-y-4">
+      <div>
+        <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
+        <input
+          id="origin"
+          type="text"
+          class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+          placeholder="Ingrese su origen"
+        />
+      </div>
+      <div>
+        <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
+        <input
+          id="destination"
+          type="text"
+          class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+          value={destination}
+          readonly
+        />
+      </div>
+      <div>
+        <label for="date" class="block text-sm font-medium text-gray-700">Fecha</label>
+        <input
+          id="date"
+          type="date"
+          class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+        />
+      </div>
+      <button
+        type="button"
+        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        onclick={() => {
+          const origin = document.getElementById("origin").value;
+          const date = document.getElementById("date").value;
+          const destination = document.getElementById("destination").value;
+          if (!origin || !destination || !date) {
+            alert("Por favor, complete todos los campos.");
+            return;
+          }
+          const message = `Hola, me gustaría reservar un viaje desde ${origin} a ${destination} para la fecha ${date}.`;
+          const waLink = `https://wa.me/your-phone-number?text=${encodeURIComponent(message)}`;
+          window.open(waLink, "_blank");
+          closeModal();
+        }}
+      >
+        Reservar
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function closeModal() {
+    const modal = document.getElementById("popup-form-modal");
+    if (modal) modal.classList.add("hidden");
+  }
+</script>

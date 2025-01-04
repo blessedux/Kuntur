@@ -1,0 +1,77 @@
+<script src="/scripts/form.js" defer></script>
+
+<section
+  class="py-12 bg-cover bg-center bg-fixed flex flex-col justify-center items-center z-20 min-h-screen px-4"
+  style="background-image: url('form-background-paine.webp');"
+>
+  <!-- Title Outside Form -->
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-black-500 leading-tight">
+      ¿Listo para una nueva <span class="italic">aventura?</span>
+    </h2>
+    <p class="text-md text-gray-600 mt-2">Reserva ahora tu próximo viaje.</p>
+  </div>
+
+  <!-- Form Wrapper with Margin & White Background -->
+  <div class="w-full max-w-sm my-12 bg-white p-8 rounded-3xl shadow-xl">
+    <!-- Form -->
+    <form id="reservationForm" class="space-y-4">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="w-full border rounded-full p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Tu nombre"
+          required
+        />
+      </div>
+      <div>
+        <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
+        <input
+          type="text"
+          id="origin"
+          name="origin"
+          class="w-full border rounded-full p-3 text-gray-400 bg-gray-100 focus:outline-none cursor-not-allowed"
+          placeholder="Punta Arenas"
+          disabled
+        />
+      </div>
+      <div>
+        <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
+        <input
+          type="text"
+          id="destination"
+          name="destination"
+          class="w-full border rounded-full p-3 text-gray-400 bg-gray-100 focus:outline-none cursor-not-allowed"
+          placeholder="Ushuaia"
+          disabled
+        />
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="w-full border rounded-full p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Tu correo electrónico"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-black text-white py-3 rounded-full hover:bg-gray-800 transition"
+      >
+        Contáctate con nosotros
+      </button>
+    </form>
+  </div>
+
+  <!-- Centered Logo Below Form -->
+  <div class="mt-6">
+    <img src="Kuntur_logo.png" alt="Company Logo" class="h-12 mx-auto">
+  </div>
+</section>
