@@ -11,13 +11,17 @@
   "dependencies": {
     "@astrojs/react": "^4.1.2",
     "@astrojs/tailwind": "^5.1.4",
+    "aos": "^2.3.4",
     "astro": "^5.1.1",
     "clsx": "^2.1.1",
+    "js": "^0.1.0",
     "lucide-react": "^0.469.0",
     "micromodal": "^0.4.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "shadcn-ui": "^0.9.4",
+    "solid": "^0.2.1",
+    "solid-js": "^1.9.3",
     "sweetalert2": "^11.15.9",
     "swiper": "^11.1.15",
     "tailwind-variants": "^0.3.0"
