@@ -3,43 +3,65 @@ import "../styles/global.css";
 ---
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("✅ Script running!");
+  import gsap from "gsap";
 
-    const videoFrame = document.getElementById("hero-video");
-    const placeholder = document.getElementById("video-placeholder");
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("✅ Script running!");
 
-    if (!videoFrame || !placeholder) {
-      console.error("❌ Video frame or placeholder not found in DOM!");
-      return;
-    }
+  const videoFrame = document.getElementById("hero-video");
+  const placeholder = document.getElementById("video-placeholder");
 
-    console.log("✅ Watching for video load...");
+  const subtitle = document.querySelector(".hero-subtitle");
+  const title = document.querySelector(".hero-title");
+  const cta = document.querySelector(".hero-cta");
 
-    // ✅ Mutation Observer to detect when Vimeo updates
-    const observer = new MutationObserver(() => {
-      console.log("✅ Detected changes in Vimeo iframe!");
-      removePlaceholder();
-      observer.disconnect(); // ✅ Stop observing once video is loaded
-    });
+  if (!videoFrame || !placeholder) {
+    console.error("❌ Video frame or placeholder not found in DOM!");
+    return;
+  }
 
-    observer.observe(videoFrame, { attributes: true, childList: true, subtree: true });
+  if (!subtitle || !title || !cta) {
+    console.error("❌ Hero section elements not found!");
+    return;
+  }
 
-    // ✅ Fallback: Remove placeholder after 5 seconds
+  console.log("✅ Elements found! Starting animations...");
+
+  // ✅ Function to Remove Placeholder
+  function removePlaceholder() {
+    console.log("✅ Video is ready, removing placeholder...");
+    placeholder.classList.add("fade-out");
+
     setTimeout(() => {
-      console.log("⏳ Removing placeholder as a fallback...");
-      removePlaceholder();
-    }, 5000);
+      placeholder.style.display = "none";
+      videoFrame.style.opacity = "1";
+      videoFrame.style.visibility = "visible";
+    }, 700); // Small delay for smooth transition
+  }
 
-    function removePlaceholder() {
-      placeholder.classList.add("fade-out");
-      setTimeout(() => {
-        placeholder.style.display = "none";
-        videoFrame.style.opacity = "1";
-        videoFrame.style.visibility = "visible";
-      }, 700);
-    }
+  // ✅ Mutation Observer for Video Load Detection
+  const observer = new MutationObserver(() => {
+    console.log("✅ Video has loaded, removing placeholder!");
+    removePlaceholder();
+    observer.disconnect();
   });
+
+  observer.observe(videoFrame, { attributes: true, childList: true, subtree: true });
+
+  // ✅ GSAP Animation (Executed After 1 Second to Ensure Proper Load)
+  setTimeout(() => {
+    gsap.set([subtitle, title, cta], { opacity: 0, y: 20 });
+
+    gsap.timeline()
+    gsap.timeline()
+    .to(subtitle, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
+    .to(title, { opacity: 1, y: 0, duration: 1, ease: "power2.out" },)
+    .to(cta, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },);
+
+
+    console.log("✅ GSAP animation started!");
+  }, 1000); // Delayed to ensure the DOM is fully ready
+});
 </script>
 
 {/* ✅ Transparent Navbar */}
@@ -78,18 +100,18 @@ import "../styles/global.css";
   <!-- ✅ Overlay -->
   <div class="absolute inset-0 bg-black/40"></div>
 
-  <!-- ✅ Content -->
-  <div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
-    <p class="mb-4 text-center text-xl md:text-2xl text-white">
+   <!-- ✅ Hero Content with Fade-in Animation -->
+   <div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
+    <p class="hero-subtitle mb-4 text-center text-xl md:text-2xl text-white opacity-0">
       Patagonia sin límites, viajes seguros.
     </p>
-    <h1 class="mb-10 md:mb-16 text-center text-3xl font-bold text-white md:text-6xl">
-      Explora <br /><span class="font-serif">Magallanes</span>
+    <h1 class="hero-title mb-10 md:mb-16 text-center text-3xl font-bold text-white md:text-6xl opacity-0">
+      Explora <br /><span class="font-serif italic">Magallanes</span>
       <br />con comodidad 
       <br /> y confianza
     </h1>
     <button
-      class="px-6 py-3 text-lg font-medium text-white border border-white rounded-full hover:bg-white hover:text-black transition"
+      class="hero-cta px-6 py-3 text-lg font-medium text-white border border-white rounded-full hover:bg-white hover:text-black transition opacity-0"
       onclick="openForm()"
     >
       Reserva Ahora →
