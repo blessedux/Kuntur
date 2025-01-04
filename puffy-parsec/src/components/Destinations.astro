@@ -1,29 +1,26 @@
 ---
-import { Card } from "./ui/Card";
 import "aos/dist/aos.css";
 import AOS from "aos";
 
 // ✅ Define the DESTINATIONS array
 const DESTINATIONS = [
-  { src: "/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899" },
-  { src: "/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899" },
-  { src: "/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899" },
-  { src: "/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899" },
-  { src: "/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto", price: "$1899" },
-  { src: "/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899" },
-  { src: "/img/punta-arenas.webp", alt: "Punta Arenas", caption: "Punta Arenas", price: "$1899" }
+  { id: "natales", src: "/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899" },
+  { id: "calafate", src: "/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899" },
+  { id: "ushuaia", src: "/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899" },
+  { id: "reserva", src: "/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899" },
+  { id: "aeropuerto", src: "/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto", price: "$1899" },
+  { id: "fuerte-bulnes", src: "/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899" },
+  { id: "punta-arenas", src: "/img/punta-arenas.webp", alt: "Punta Arenas", caption: "Punta Arenas", price: "$1899" }
 ];
 
-// ✅ Use Astro client directive to ensure AOS runs in the browser
-setTimeout(() => {
-  if (typeof window !== "undefined") {
-    AOS.init({
-      duration: 800, // Animation duration
-      easing: "ease-in-out", // Smooth animation
-      once: true, // Runs only once per page load
-    });
-  }
-}, 100);
+// ✅ Initialize AOS only in the browser
+if (typeof window !== "undefined") {
+  AOS.init({
+    duration: 800,
+    easing: "ease-in-out",
+    once: true,
+  });
+}
 ---
 
 <section class="relative mt-0 py-16 bg-gray-50" client:load>
@@ -34,15 +31,17 @@ setTimeout(() => {
   </div>
 
   <div class="px-4">
-    <!-- Cards with AOS Animation -->
+    <!-- Destination Cards with AOS Animation -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {DESTINATIONS.map((destination, index) => (
-        <div
+       <div
+  id={destination.id} 
   key={index}
-  class="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-  onclick={`openModal('${destination.caption}')`}
-  data-aos-delay={index * 150} <!-- Remove "data-aos" to test -->
-
+  class="destination-card overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+  on:click={() => window.openModal(destination.caption)}
+  data-aos="fade-up"
+  data-aos-delay={index * 150} 
+>
           <div class="relative w-full h-56">
             <img
               src={destination.src}
@@ -63,19 +62,65 @@ setTimeout(() => {
   </div>
 </section>
 
+<!-- ✅ Define openModal function -->
 <script is:inline>
   document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ AOS script is running!");
+
+   // ✅ Improved Smooth Scrolling Function
+   document.querySelectorAll(".scroll-link").forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute("href").substring(1); // Remove #
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          console.log(`Scrolling to: #${targetId}`); // Debugging log
+
+          // ✅ Ensure scrolling is precise and accounts for fixed headers
+          const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+          const offset = 80; // Adjust offset based on header size
+
+          window.scrollTo({
+            top: elementPosition - offset,
+            behavior: "smooth",
+          });
+        } else {
+          console.error(`❌ Element with ID '${targetId}' not found.`);
+        }
+      });
+    });
+
     if (typeof AOS !== "undefined") {
+      console.log("✅ AOS is defined. Initializing...");
       AOS.init({
-        duration: 800, // Animation duration
-        easing: "ease-in-out", // Smooth animation
-        once: true, // Runs only once per page load
+        duration: 800,
+        easing: "ease-in-out",
+        once: true,
       });
     } else {
-      console.error("❌ AOS library failed to load.");
+      console.error("❌ AOS is not defined!");
     }
+
+    // ✅ Define openModal function globally
+    window.openModal = function (destination) {
+      console.log(`Opening modal for: ${destination}`);
+      
+      const modal = document.getElementById("popup-form-modal");
+      const destinationInput = document.getElementById("destination");
+
+      if (modal) modal.classList.remove("hidden");
+      if (destinationInput) destinationInput.value = destination;
+    };
+
+    // ✅ Close modal when clicking close button
+    document.getElementById("close-modal")?.addEventListener("click", () => {
+      document.getElementById("popup-form-modal")?.classList.add("hidden");
+    });
   });
 </script>
+
 <style>
   /* ✅ Ensure elements are visible even if AOS fails */
   [data-aos] {
@@ -84,3 +129,30 @@ setTimeout(() => {
     visibility: visible !important;
   }
 </style>
+
+<!-- ✅ Add Modal -->
+<div id="popup-form-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <header class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-bold">Reserva tu viaje</h2>
+      <button class="text-gray-500 hover:text-gray-800" id="close-modal">✖</button>
+    </header>
+    <form class="space-y-4">
+      <div>
+        <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
+        <input id="origin" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" placeholder="Ingrese su origen" />
+      </div>
+      <div>
+        <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
+        <input id="destination" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" value="" readonly />
+      </div>
+      <div>
+        <label for="date" class="block text-sm font-medium text-gray-700">Fecha</label>
+        <input id="date" type="date" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" />
+      </div>
+      <button type="button" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition" id="submit-form">
+        Reservar
+      </button>
+    </form>
+  </div>
+</div>

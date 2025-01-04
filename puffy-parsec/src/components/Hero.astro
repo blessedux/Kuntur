@@ -4,24 +4,45 @@ import "../styles/global.css";
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ Script running!");
+
     const videoFrame = document.getElementById("hero-video");
     const placeholder = document.getElementById("video-placeholder");
 
-    // Check when the video iframe is loaded
-    videoFrame.onload = function () {
-      // Give some time for video buffering before removing the placeholder
+    if (!videoFrame || !placeholder) {
+      console.error("❌ Video frame or placeholder not found in DOM!");
+      return;
+    }
+
+    console.log("✅ Watching for video load...");
+
+    // ✅ Mutation Observer to detect when Vimeo updates
+    const observer = new MutationObserver(() => {
+      console.log("✅ Detected changes in Vimeo iframe!");
+      removePlaceholder();
+      observer.disconnect(); // ✅ Stop observing once video is loaded
+    });
+
+    observer.observe(videoFrame, { attributes: true, childList: true, subtree: true });
+
+    // ✅ Fallback: Remove placeholder after 5 seconds
+    setTimeout(() => {
+      console.log("⏳ Removing placeholder as a fallback...");
+      removePlaceholder();
+    }, 5000);
+
+    function removePlaceholder() {
+      placeholder.classList.add("fade-out");
       setTimeout(() => {
-        placeholder.classList.add("fade-out"); // Apply fade-out effect
-        setTimeout(() => {
-          placeholder.style.display = "none"; // Hide completely after fade-out
-          videoFrame.style.display = "block"; // Show video
-        }, 500); // Fade-out duration
-      }, 2000); // Ensure video has time to start loading
-    };
+        placeholder.style.display = "none";
+        videoFrame.style.opacity = "1";
+        videoFrame.style.visibility = "visible";
+      }, 700);
+    }
   });
 </script>
 
-{/* Transparent Navbar */}
+{/* ✅ Transparent Navbar */}
 <nav class="absolute top-0 left-0 w-full z-10 flex items-center justify-between px-8 py-4 text-white bg-transparent">
   <div class="flex items-center space-x-4">
     <img src="/Kuntur_logo.png" alt="Kuntur Logo" class="h-10">
@@ -34,34 +55,33 @@ import "../styles/global.css";
 </nav>
 
 <section class="relative h-screen w-full overflow-hidden z-[1]" id="hero">
-  {/* Placeholder Image */}
-  <div id="video-placeholder" class="absolute inset-0 flex items-center justify-center bg-black min-h-screen">
-    <img src="/Hero_Section_BackgroundImage_placeholder.webp" alt="Loading Video" 
-         class="w-full h-full object-cover block" />
+  <!-- ✅ Placeholder Image -->
+  <div id="video-placeholder" class="absolute inset-0 flex items-center justify-center bg-black">
+    <img src="/Hero_Section_BackgroundImage_placeholder.webp" alt="Loading Video" class="absolute inset-0 w-full h-full object-cover" />
   </div>
 
-  {/* Video Background */}
+  <!-- ✅ Background Video (Fixed to Always Cover the Viewport) -->
   <div class="absolute inset-0 z-[0]">
     <iframe
       id="hero-video"
       src="https://player.vimeo.com/video/1043407655?background=1&dnt=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
       class="absolute 
-        top-1/2 left-1/2 w-[177.77777778vh] min-w-full min-h-full 
-        -translate-x-1/2 -translate-y-1/2 
-        sm:left-0 sm:top-0 sm:w-full sm:h-full sm:translate-x-0 sm:translate-y-0 hidden"
+        xl:top-1/2 xl:h-[200%] xl:w-[200%] xl:[aspect-ratio:16/9]
+        top-[calc(50%-4px)] left-1/2 w-[177.77777778vh] min-w-full min-h-[calc(100%+6px)] 
+        -translate-x-1/2 -translate-y-1/2"
       frameborder="0"
       allow="autoplay; fullscreen"
       allowfullscreen
     ></iframe>
   </div>
 
-  {/* Overlay */}
+  <!-- ✅ Overlay -->
   <div class="absolute inset-0 bg-black/40"></div>
 
-  {/* Content */}
+  <!-- ✅ Content -->
   <div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
     <p class="mb-4 text-center text-xl md:text-2xl text-white">
-      Patagonia sin limites, viajes seguros.
+      Patagonia sin límites, viajes seguros.
     </p>
     <h1 class="mb-10 md:mb-16 text-center text-3xl font-bold text-white md:text-6xl">
       Explora <br /><span class="font-serif">Magallanes</span>
@@ -76,3 +96,36 @@ import "../styles/global.css";
     </button>
   </div>
 </section>
+
+<style>
+  /* ✅ Full-Screen Video Fix */
+  .video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* This won't work but keeping it for potential future compatibility */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.7s ease-in;
+  }
+
+  /* ✅ Placeholder Fully Covers the Hero Section */
+  #video-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  /* ✅ Smooth fade-out effect for placeholder */
+  .fade-out {
+    transition: opacity 0.7s ease-out;
+    opacity: 0;
+    visibility: hidden;
+  }
+</style>
