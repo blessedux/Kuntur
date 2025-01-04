@@ -8,12 +8,33 @@ import "../styles/global.css";
 document.addEventListener("DOMContentLoaded", function () {
   console.log("✅ Script running!");
 
+  const ctaButton = document.querySelector(".hero-cta");
   const videoFrame = document.getElementById("hero-video");
   const placeholder = document.getElementById("video-placeholder");
 
   const subtitle = document.querySelector(".hero-subtitle");
   const title = document.querySelector(".hero-title");
   const cta = document.querySelector(".hero-cta");
+
+  if (!ctaButton) {
+    console.error("❌ CTA button not found!");
+    return;
+  }
+
+  ctaButton.addEventListener("click", function () {
+    const phoneNumber = "+56958374420"; // ✅ Replace with your WhatsApp number
+    const message = encodeURIComponent(
+      "Hola! Quisiera reservar un viaje con Kuntur." +
+      "Mi origen es: [Escribe tu ciudad]" +
+      "Mi destino es: [Escribe tu destino]" +
+      "Por favor, envíame más información. ¡Gracias!"
+    );
+
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+
+    console.log("✅ Redirecting to:", whatsappURL);
+    window.open(whatsappURL, "_blank");
+  });
 
   if (!videoFrame || !placeholder) {
     console.error("❌ Video frame or placeholder not found in DOM!");
@@ -50,18 +71,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ✅ GSAP Animation (Executed After 1 Second to Ensure Proper Load)
   setTimeout(() => {
-    gsap.set([subtitle, title, cta], { opacity: 0, y: 20 });
+    gsap.set([subtitle, title, cta], { opacity: 0, y: 40 });
 
     gsap.timeline()
-    gsap.timeline()
     .to(subtitle, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-    .to(title, { opacity: 1, y: 0, duration: 1, ease: "power2.out" },)
-    .to(cta, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },);
+    .to(title, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5")
+    .to(cta, { opacity: 1, y: 0, duration: 1, ease: "power2.out" },"-=2");
 
 
     console.log("✅ GSAP animation started!");
   }, 1000); // Delayed to ensure the DOM is fully ready
 });
+
+
 </script>
 
 {/* ✅ Transparent Navbar */}
