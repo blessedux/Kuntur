@@ -1,198 +1,130 @@
 ---
-import PopupForm from "./PopupForm.astro";
-import "aos/dist/aos.css";
-import AOS from "aos";
+import 'aos/dist/aos.css'
+import AOS from 'aos'
 
-// ✅ Reactive State Variables for Modal Control
-let isOpen = false;
-let selectedOrigin = "";
+// ✅ Initialize AOS only when the DOM is ready
+if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ Initializing AOS...')
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    })
 
-// ✅ Ensure AOS initializes only in the browser
-if (typeof window !== "undefined") {
-  AOS.init({
-    duration: 800,
-    easing: "ease-in-out",
-    once: true,
-  });
+    setTimeout(() => {
+      console.log('🔹 AOS refresh triggered')
+      AOS.refresh()
+    }, 500)
+  })
 }
 
-// ✅ Open Modal Function
-function openModal(origin) {
-  selectedOrigin = origin;
-  isOpen = true;
-}
-
-// ✅ Close Modal Function
-function closeModal() {
-  isOpen = false;
-}
-
-// ✅ Define the DESTINATIONS array
+// ✅ Define DESTINATIONS array
 const DESTINATIONS = [
-  { id: "natales", src: "/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899" },
-  { id: "calafate", src: "/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899" },
-  { id: "ushuaia", src: "/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899" },
-  { id: "reserva", src: "/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899" },
-  { id: "aeropuerto", src: "/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto Punta Arenas", price: "$1899" },
-  { id: "fuerte-bulnes", src: "/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899" },
-  { id: "punta-arenas", src: "/img/punta-arenas.webp", alt: "Punta Arenas", caption: "Punta Arenas", price: "$1899" }
-];
+  {
+    id: 'natales',
+    src: '/img/natales.webp',
+    alt: 'Natales',
+    caption: 'Puerto Natales',
+    price: '$1899'
+  },
+  {
+    id: 'calafate',
+    src: '/img/calafate.webp',
+    alt: 'Calafate',
+    caption: 'El Calafate',
+    price: '$1899'
+  },
+  {
+    id: 'ushuaia',
+    src: '/img/ushuaia.webp',
+    alt: 'Ushuaia',
+    caption: 'Ushuaia, Tierra del Fuego',
+    price: '$1899'
+  },
+  {
+    id: 'reserva',
+    src: '/img/reserva.webp',
+    alt: 'Reserva Magallanes',
+    caption: 'Reserva Magallanes',
+    price: '$1899'
+  },
+  {
+    id: 'aeropuerto',
+    src: '/img/aeropuerto.webp',
+    alt: 'Aeropuerto',
+    caption: 'Aeropuerto Punta Arenas',
+    price: '$1899'
+  },
+  {
+    id: 'fuerte-bulnes',
+    src: '/img/fuerte-bulnes.webp',
+    alt: 'Fuerte Bulnes',
+    caption: 'Fuerte Bulnes',
+    price: '$1899'
+  },
+  {
+    id: 'punta-arenas',
+    src: '/img/punta-arenas.webp',
+    alt: 'Punta Arenas',
+    caption: 'Punta Arenas',
+    price: '$1899'
+  }
+]
+console.log('✅ DESTINATIONS array loaded:', DESTINATIONS)
 ---
 
+<!-- ✅ Load JavaScript for scrolling and interactions -->
+<script src="/scripts/destinations.js" defer></script>
+
 <section class="relative destinations mt-0 py-16 bg-gray-50" client:load>
-  <!-- Header -->
+  <!-- ✅ Header Section -->
   <div class="text-center relative">
     <h2 class="text-5xl ml-8 text-left font-regular text-gray-900">
-      <span class="font-serif italic">Reserva</span> ahora <br /> tu transporte <br />privado
+      <span class="font-serif italic">Reserva</span> ahora <br /> tu transporte <br
+      />privado
     </h2>
     <p class="text-lg ml-8 text-left text-gray-600 my-12">
       Sabemos que necesitas un transporte <br />confiable, rápido y seguro.
     </p>
   </div>
 
+  <!-- ✅ Destination Cards -->
   <div class="px-4">
-    <!-- Destination Cards with AOS Animation -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {DESTINATIONS.map((destination, index) => (
-        <div
-          id={destination.id} 
-          key={index}
-          class="destination-card overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-          on:click={() => openModal(destination.caption)} 
-          data-aos="fade-up"
-          data-aos-delay={index * 150} 
-        >
-          <div class="relative w-full h-56">
-            <img
-              src={destination.src}
-              alt={destination.alt}
-              class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
-            />
-          </div>
-          <div class="p-4 bg-white rounded-b-lg">
-            <p class="text-gray-800 font-medium mb-1">{destination.caption}</p>
-            <div class="flex justify-between items-center">
-              <p class="text-sm text-gray-500">Precio</p>
-              <p class="text-lg font-bold text-gray-800">{destination.price}</p>
+      {
+        DESTINATIONS.length > 0 ? (
+          DESTINATIONS.map((destination, index) => (
+            <div
+              id={destination.id}
+              key={index}
+              class="destination-card visible duration-700 overflow-hidden rounded-lg shadow-lg hover:shadow-xl cursor-pointer"
+              data-aos-delay={index * 150}
+            >
+              <div class="relative w-full h-56">
+                <img
+                  src={destination.src}
+                  alt={destination.alt}
+                  class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
+                />
+              </div>
+              <div class="p-4 bg-white rounded-b-lg">
+                <p class="text-gray-800 font-medium mb-1">
+                  {destination.caption}
+                </p>
+                <div class="flex justify-between items-center">
+                  <p class="text-sm text-gray-500">Precio</p>
+                  <p class="text-lg font-bold text-gray-800">
+                    {destination.price}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
+          ))
+        ) : (
+          <p class="text-center text-gray-500">❌ No destinations available</p>
+        )
+      }
     </div>
   </div>
 </section>
-
-<!-- ✅ Popup Form Component (Shows when a destination is clicked) -->
-<PopupForm isOpen={isOpen} origin={selectedOrigin} onClose={closeModal} />
-<!-- ✅ Define openModal function -->
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("✅ AOS script is running!");
-
-    // ✅ Improved Smooth Scrolling Function
-    document.querySelectorAll(".scroll-link").forEach((link) => {
-      link.addEventListener("click", function (e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute("href").substring(1); // Remove #
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-          console.log(`Scrolling to: #${targetId}`); // Debugging log
-
-          // ✅ Ensure scrolling is precise and accounts for fixed headers
-          const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-          const offset = 80; // Adjust offset based on header size
-
-          window.scrollTo({
-            top: elementPosition - offset,
-            behavior: "smooth",
-          });
-        } else {
-          console.error(`❌ Element with ID '${targetId}' not found.`);
-        }
-      });
-    });
-
-    if (typeof AOS !== "undefined") {
-      console.log("✅ AOS is defined. Initializing...");
-      AOS.init({
-        duration: 800,
-        easing: "ease-in-out",
-        once: true,
-      });
-    } else {
-      console.error("❌ AOS is not defined!");
-    }
-
-    // ✅ Define openModal function globally
-    window.openModal = function (origin) {
-      console.log(`Opening modal with origin: ${origin}`);
-      
-      const modal = document.getElementById("popup-form-modal");
-      const originInput = document.getElementById("origin");
-
-      if (modal) modal.classList.remove("hidden");
-      if (originInput) originInput.value = origin; // ✅ Pre-fill Origin field
-    };
-
-    // ✅ Close modal when clicking close button
-    document.getElementById("close-modal")?.addEventListener("click", () => {
-      document.getElementById("popup-form-modal")?.classList.add("hidden");
-    });
-
-    // ✅ Handle WhatsApp message when submitting the form
-    document.getElementById("submit-form")?.addEventListener("click", () => {
-      const origin = document.getElementById("origin").value;
-      const destination = document.getElementById("destination").value;
-      const date = document.getElementById("date").value;
-
-      if (!origin || !destination || !date) {
-        alert("Por favor, complete todos los campos.");
-        return;
-      }
-
-      const message = `Hola, me gustaría reservar un viaje desde ${origin} a ${destination} para la fecha ${date}.`;
-      const waLink = `https://wa.me/569XXXXXXXX?text=${encodeURIComponent(message)}`;
-
-      window.open(waLink, "_blank");
-      document.getElementById("popup-form-modal")?.classList.add("hidden");
-    });
-  });
-</script>
-
-<style>
-  /* ✅ Ensure elements are visible even if AOS fails */
-  [data-aos] {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    visibility: visible !important;
-  }
-</style>
-
-<!-- ✅ Add Modal -->
-<div id="popup-form-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-    <header class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-bold">Reserva tu viaje</h2>
-      <button class="text-gray-500 hover:text-gray-800" id="close-modal">✖</button>
-    </header>
-    <form class="space-y-4">
-      <div>
-        <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
-        <input id="origin" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" readonly />
-      </div>
-      <div>
-        <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
-        <input id="destination" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" placeholder="Ingrese su destino" />
-      </div>
-      <div>
-        <label for="date" class="block text-sm font-medium text-gray-700">Fecha</label>
-        <input id="date" type="date" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" />
-      </div>
-      <button type="button" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition" id="submit-form">
-        Reservar
-      </button>
-    </form>
-  </div>
-</div>
