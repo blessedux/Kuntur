@@ -1,19 +1,13 @@
 ---
+import PopupForm from "./PopupForm.astro";
 import "aos/dist/aos.css";
 import AOS from "aos";
 
-// ✅ Define the DESTINATIONS array
-const DESTINATIONS = [
-  { id: "natales", src: "/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899" },
-  { id: "calafate", src: "/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899" },
-  { id: "ushuaia", src: "/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899" },
-  { id: "reserva", src: "/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899" },
-  { id: "aeropuerto", src: "/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto", price: "$1899" },
-  { id: "fuerte-bulnes", src: "/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899" },
-  { id: "punta-arenas", src: "/img/punta-arenas.webp", alt: "Punta Arenas", caption: "Punta Arenas", price: "$1899" }
-];
+// ✅ Reactive State Variables for Modal Control
+let isOpen = false;
+let selectedOrigin = "";
 
-// ✅ Initialize AOS only in the browser
+// ✅ Ensure AOS initializes only in the browser
 if (typeof window !== "undefined") {
   AOS.init({
     duration: 800,
@@ -21,27 +15,53 @@ if (typeof window !== "undefined") {
     once: true,
   });
 }
+
+// ✅ Open Modal Function
+function openModal(origin) {
+  selectedOrigin = origin;
+  isOpen = true;
+}
+
+// ✅ Close Modal Function
+function closeModal() {
+  isOpen = false;
+}
+
+// ✅ Define the DESTINATIONS array
+const DESTINATIONS = [
+  { id: "natales", src: "/img/natales.webp", alt: "Natales", caption: "Puerto Natales", price: "$1899" },
+  { id: "calafate", src: "/img/calafate.webp", alt: "Calafate", caption: "El Calafate", price: "$1899" },
+  { id: "ushuaia", src: "/img/ushuaia.webp", alt: "Ushuaia", caption: "Ushuaia, Tierra del Fuego", price: "$1899" },
+  { id: "reserva", src: "/img/reserva.webp", alt: "Reserva Magallanes", caption: "Reserva Magallanes", price: "$1899" },
+  { id: "aeropuerto", src: "/img/aeropuerto.webp", alt: "Aeropuerto", caption: "Aeropuerto Punta Arenas", price: "$1899" },
+  { id: "fuerte-bulnes", src: "/img/fuerte-bulnes.webp", alt: "Fuerte Bulnes", caption: "Fuerte Bulnes", price: "$1899" },
+  { id: "punta-arenas", src: "/img/punta-arenas.webp", alt: "Punta Arenas", caption: "Punta Arenas", price: "$1899" }
+];
 ---
 
-<section class="relative mt-0 py-16 bg-gray-50" client:load>
+<section class="relative destinations mt-0 py-16 bg-gray-50" client:load>
   <!-- Header -->
   <div class="text-center relative">
-    <h2 class="text-5xl ml-8 text-left font-regular text-gray-900"><span class="font-serif italic">Reserva</span> ahora <br /> tu transporte <br />privado</h2>
-    <p class="text-lg ml-8 text-left text-gray-600 my-12">Sabemos que necesitas un transporte <br />confiable, rápido y seguro.</p>
+    <h2 class="text-5xl ml-8 text-left font-regular text-gray-900">
+      <span class="font-serif italic">Reserva</span> ahora <br /> tu transporte <br />privado
+    </h2>
+    <p class="text-lg ml-8 text-left text-gray-600 my-12">
+      Sabemos que necesitas un transporte <br />confiable, rápido y seguro.
+    </p>
   </div>
 
   <div class="px-4">
     <!-- Destination Cards with AOS Animation -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {DESTINATIONS.map((destination, index) => (
-       <div
-  id={destination.id} 
-  key={index}
-  class="destination-card overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-  on:click={() => window.openModal(destination.caption)}
-  data-aos="fade-up"
-  data-aos-delay={index * 150} 
->
+        <div
+          id={destination.id} 
+          key={index}
+          class="destination-card overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+          on:click={() => openModal(destination.caption)} 
+          data-aos="fade-up"
+          data-aos-delay={index * 150} 
+        >
           <div class="relative w-full h-56">
             <img
               src={destination.src}
@@ -62,13 +82,15 @@ if (typeof window !== "undefined") {
   </div>
 </section>
 
+<!-- ✅ Popup Form Component (Shows when a destination is clicked) -->
+<PopupForm isOpen={isOpen} origin={selectedOrigin} onClose={closeModal} />
 <!-- ✅ Define openModal function -->
 <script is:inline>
   document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ AOS script is running!");
 
-   // ✅ Improved Smooth Scrolling Function
-   document.querySelectorAll(".scroll-link").forEach((link) => {
+    // ✅ Improved Smooth Scrolling Function
+    document.querySelectorAll(".scroll-link").forEach((link) => {
       link.addEventListener("click", function (e) {
         e.preventDefault();
         
@@ -104,18 +126,36 @@ if (typeof window !== "undefined") {
     }
 
     // ✅ Define openModal function globally
-    window.openModal = function (destination) {
-      console.log(`Opening modal for: ${destination}`);
+    window.openModal = function (origin) {
+      console.log(`Opening modal with origin: ${origin}`);
       
       const modal = document.getElementById("popup-form-modal");
-      const destinationInput = document.getElementById("destination");
+      const originInput = document.getElementById("origin");
 
       if (modal) modal.classList.remove("hidden");
-      if (destinationInput) destinationInput.value = destination;
+      if (originInput) originInput.value = origin; // ✅ Pre-fill Origin field
     };
 
     // ✅ Close modal when clicking close button
     document.getElementById("close-modal")?.addEventListener("click", () => {
+      document.getElementById("popup-form-modal")?.classList.add("hidden");
+    });
+
+    // ✅ Handle WhatsApp message when submitting the form
+    document.getElementById("submit-form")?.addEventListener("click", () => {
+      const origin = document.getElementById("origin").value;
+      const destination = document.getElementById("destination").value;
+      const date = document.getElementById("date").value;
+
+      if (!origin || !destination || !date) {
+        alert("Por favor, complete todos los campos.");
+        return;
+      }
+
+      const message = `Hola, me gustaría reservar un viaje desde ${origin} a ${destination} para la fecha ${date}.`;
+      const waLink = `https://wa.me/569XXXXXXXX?text=${encodeURIComponent(message)}`;
+
+      window.open(waLink, "_blank");
       document.getElementById("popup-form-modal")?.classList.add("hidden");
     });
   });
@@ -140,11 +180,11 @@ if (typeof window !== "undefined") {
     <form class="space-y-4">
       <div>
         <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
-        <input id="origin" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" placeholder="Ingrese su origen" />
+        <input id="origin" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" readonly />
       </div>
       <div>
         <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
-        <input id="destination" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" value="" readonly />
+        <input id="destination" type="text" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200" placeholder="Ingrese su destino" />
       </div>
       <div>
         <label for="date" class="block text-sm font-medium text-gray-700">Fecha</label>

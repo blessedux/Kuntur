@@ -19,7 +19,6 @@
     "js": "^0.1.0",
     "lucide-react": "^0.469.0",
     "micromodal": "^0.4.10",
-    "prettier": "^3.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "shadcn-ui": "^0.9.4",
@@ -28,5 +27,9 @@
     "sweetalert2": "^11.15.9",
     "swiper": "^11.1.15",
     "tailwind-variants": "^0.3.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }
