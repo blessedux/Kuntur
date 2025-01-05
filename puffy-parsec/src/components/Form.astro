@@ -1,3 +1,7 @@
+---
+import { Image } from 'astro:assets'
+---
+
 <script src="/scripts/form.js" defer></script>
 
 <section
@@ -7,7 +11,8 @@
   <!-- Title Outside Form -->
   <div class="text-center mb-8">
     <h2 class="text-4xl font-regular text-black-500 leading-tight">
-      ¿Listo para <br />una nueva <br /> <span class="font-serif italic">aventura?</span>
+      ¿Listo para <br />una nueva <br />
+      <span class="font-serif italic">aventura?</span>
     </h2>
     <p class="text-xl text-black-600 mt-2">Reserva ahora tu próximo viaje.</p>
   </div>
@@ -17,7 +22,9 @@
     <!-- Form -->
     <form id="reservationForm" class="space-y-4">
       <div>
-        <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+        <label for="name" class="block text-sm font-medium text-gray-700"
+          >Nombre</label
+        >
         <input
           type="text"
           id="name"
@@ -28,7 +35,9 @@
         />
       </div>
       <div>
-        <label for="origin" class="block text-sm font-medium text-gray-700">Origen</label>
+        <label for="origin" class="block text-sm font-medium text-gray-700"
+          >Origen</label
+        >
         <input
           type="text"
           id="origin"
@@ -36,11 +45,12 @@
           class="w-full border rounded-full p-3 text-gray-400 bg-gray-100 focus:outline-none cursor-not-allowed"
           placeholder="Punta Arenas"
           required
-          
         />
       </div>
       <div>
-        <label for="destination" class="block text-sm font-medium text-gray-700">Destino</label>
+        <label for="destination" class="block text-sm font-medium text-gray-700"
+          >Destino</label
+        >
         <input
           type="text"
           id="destination"
@@ -48,12 +58,13 @@
           class="w-full border rounded-full p-3 text-gray-400 bg-gray-100 focus:outline-none cursor-not-allowed"
           placeholder="Ushuaia"
           required
-          
         />
       </div>
       <div>
-        <label for="date" class="block text-sm font-medium text-gray-700">Fecha del viaje</label>
-        <input 
+        <label for="date" class="block text-sm font-medium text-gray-700"
+          >Fecha del viaje</label
+        >
+        <input
           id="date"
           type="date"
           class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
@@ -65,13 +76,19 @@
         type="submit"
         class="w-full bg-black text-white py-3 rounded-full hover:bg-gray-800 transition"
       >
-        Contáctate con nosotros
+        Reserva tu transporte
       </button>
     </form>
   </div>
 
   <!-- Centered Logo Below Form -->
   <div class="mt-6">
-    <img src="Kuntur_logo.png" alt="Company Logo" class="h-12 mx-auto">
+    <Image
+      src="/Kuntur_logo.png"
+      alt="Company Logo"
+      width={150}
+      height={50}
+      class="h-12 mx-auto"
+    />
   </div>
 </section>

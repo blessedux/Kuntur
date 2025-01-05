@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets'
+---
+
+<section class="py-12 px-6 text-gray-800 bg-white">
+  <!-- Title -->
+  <div class="text-center mb-6">
+    <h2 class="text-4xl text-left text-black">
+      <span class="font-serif italic">Somos</span> Kuntur
+    </h2>
+  </div>
+
+  <!-- Mission Statement -->
+  <p class="text-lg text-gray-700 text-left leading-relaxed">
+    Somos una empresa local, nacida y creada en la región de Magallanes. Desde
+    nuestros inicios, nuestra misión ha sido clara:
+  </p>
+
+  <div class="mt-4 px-4">
+    <ul class="text-gray-700 text-left text-lg list-disc">
+      <li>
+        Ofrecer a turistas, viajeros y trabajadores un servicio de transporte
+        confiable que refleje la esencia y el valor de nuestra tierra.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Images Section -->
+  <div class="mt-8 flex flex-col gap-4">
+    <!-- Vans Image -->
+    <div class="rounded-xl overflow-hidden">
+      <Image
+        src="/img/Real-vans.webp"
+        alt="Kuntur Transporte - Flota de vehículos"
+        width={400}
+        height={250}
+        class="w-full object-cover"
+      />
+    </div>
+
+    <!-- Adventure Van Image -->
+    <div class="rounded-xl overflow-hidden">
+      <Image
+        src="/img/travel.webp"
+        alt="Kuntur Transporte - Van en la montaña"
+        width={400}
+        height={250}
+        class="w-full object-cover"
+      />
+    </div>
+  </div>
+</section>

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
 
@@ -102,9 +103,20 @@ console.log('✅ DESTINATIONS array loaded:', DESTINATIONS)
               data-aos-delay={index * 150}
             >
               <div class="relative w-full h-56">
-                <img
+                <Image
                   src={destination.src}
                   alt={destination.alt}
+                  width={400}
+                  Set
+                  a
+                  reasonable
+                  width
+                  height={250}
+                  Set
+                  a
+                  reasonable
+                  height
+                  format="webp"
                   class="absolute inset-0 w-full h-full object-cover rounded-t-lg"
                 />
               </div>
