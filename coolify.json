@@ -1,0 +1,17 @@
+{
+    "name": "kuntur-app",
+    "type": "docker",
+    "image": "blessedux/kuntur:latest",
+    "port": 80,
+    "env": {
+        "NODE_ENV": "production"
+    },
+    "resources": {
+        "cpu": 1,
+        "memory": 512
+    },
+    "healthCheck": {
+        "path": "/",
+        "port": 80
+    }
+}
