@@ -26,26 +26,28 @@ import { Image } from 'astro:assets'
   </div>
 
   <!-- Images Section -->
-  <div class="mt-8 flex flex-col gap-4">
-    <!-- Vans Image -->
-    <div class="rounded-xl overflow-hidden">
+  <div
+    class="mt-8 flex flex-col items-center gap-4 md:flex-row md:justify-center md:gap-8"
+  >
+    <!-- Vans Image (Rounded Borders) -->
+    <div class="overflow-hidden md:w-1/3">
       <Image
         src="/img/Real-vans.webp"
         alt="Kuntur Transporte - Flota de vehículos"
         width={400}
         height={250}
-        class="w-full object-cover"
+        class="w-full max-w-xs md:max-w-md object-cover mx-auto rounded-2xl aspect-[16/10]"
       />
     </div>
 
-    <!-- Adventure Van Image -->
-    <div class="rounded-xl overflow-hidden">
+    <!-- Adventure Van Image (Same Size as First Image) -->
+    <div class="overflow-hidden md:w-1/3">
       <Image
         src="/img/travel.webp"
         alt="Kuntur Transporte - Van en la montaña"
         width={400}
         height={250}
-        class="w-full object-cover"
+        class="w-full max-w-xs md:max-w-md object-cover mx-auto rounded-2xl aspect-[16/10]"
       />
     </div>
   </div>
