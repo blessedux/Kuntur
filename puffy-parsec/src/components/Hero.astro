@@ -1,107 +1,117 @@
 ---
-import "../styles/global.css";
+import '../styles/global.css'
 ---
 
 <script>
-  import gsap from "gsap";
+  import gsap from 'gsap'
 
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("✅ Script running!");
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('✅ Script running!')
 
-  const ctaButton = document.querySelector(".hero-cta");
-  const videoFrame = document.getElementById("hero-video");
-  const placeholder = document.getElementById("video-placeholder");
+    const ctaButton = document.querySelector('.hero-cta')
+    const videoFrame = document.getElementById('hero-video')
+    const placeholder = document.getElementById('video-placeholder')
 
-  const subtitle = document.querySelector(".hero-subtitle");
-  const title = document.querySelector(".hero-title");
-  const cta = document.querySelector(".hero-cta");
+    const subtitle = document.querySelector('.hero-subtitle')
+    const title = document.querySelector('.hero-title')
+    const cta = document.querySelector('.hero-cta')
 
-  if (!ctaButton) {
-    console.error("❌ CTA button not found!");
-    return;
-  }
+    if (!ctaButton) {
+      console.error('❌ CTA button not found!')
+      return
+    }
 
-  ctaButton.addEventListener("click", function () {
-    const phoneNumber = "+56958374420"; // ✅ Replace with your WhatsApp number
-    const message = encodeURIComponent(
-      "Hola! Quisiera reservar un viaje con Kuntur." +
-      "Mi origen es: [Escribe tu ciudad]" +
-      "Mi destino es: [Escribe tu destino]" +
-      "Por favor, envíame más información. ¡Gracias!"
-    );
+    ctaButton.addEventListener('click', function () {
+      const phoneNumber = '+56958374420' // ✅ Replace with your WhatsApp number
+      const message = encodeURIComponent(
+        'Hola! Quisiera reservar un viaje con Kuntur.' +
+          'Mi origen es: [Escribe tu ciudad]' +
+          'Mi destino es: [Escribe tu destino]' +
+          'Por favor, envíame más información. ¡Gracias!'
+      )
 
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`
 
-    console.log("✅ Redirecting to:", whatsappURL);
-    window.open(whatsappURL, "_blank");
-  });
+      console.log('✅ Redirecting to:', whatsappURL)
+      window.open(whatsappURL, '_blank')
+    })
 
-  if (!videoFrame || !placeholder) {
-    console.error("❌ Video frame or placeholder not found in DOM!");
-    return;
-  }
+    if (!videoFrame || !placeholder) {
+      console.error('❌ Video frame or placeholder not found in DOM!')
+      return
+    }
 
-  if (!subtitle || !title || !cta) {
-    console.error("❌ Hero section elements not found!");
-    return;
-  }
+    if (!subtitle || !title || !cta) {
+      console.error('❌ Hero section elements not found!')
+      return
+    }
 
-  console.log("✅ Elements found! Starting animations...");
+    console.log('✅ Elements found! Starting animations...')
 
-  // ✅ Function to Remove Placeholder
-  function removePlaceholder() {
-    console.log("✅ Video is ready, removing placeholder...");
-    placeholder.classList.add("fade-out");
+    // ✅ Function to Remove Placeholder
+    function removePlaceholder() {
+      console.log('✅ Video is ready, removing placeholder...')
+      placeholder.classList.add('fade-out')
 
+      setTimeout(() => {
+        placeholder.style.display = 'none'
+        videoFrame.style.opacity = '1'
+        videoFrame.style.visibility = 'visible'
+      }, 700) // Small delay for smooth transition
+    }
+
+    // ✅ Mutation Observer for Video Load Detection
+    const observer = new MutationObserver(() => {
+      console.log('✅ Video has loaded, removing placeholder!')
+      removePlaceholder()
+      observer.disconnect()
+    })
+
+    observer.observe(videoFrame, {
+      attributes: true,
+      childList: true,
+      subtree: true
+    })
+
+    // ✅ GSAP Animation (Executed After 1 Second to Ensure Proper Load)
     setTimeout(() => {
-      placeholder.style.display = "none";
-      videoFrame.style.opacity = "1";
-      videoFrame.style.visibility = "visible";
-    }, 700); // Small delay for smooth transition
-  }
+      gsap.set([subtitle, title, cta], { opacity: 0, y: 40 })
 
-  // ✅ Mutation Observer for Video Load Detection
-  const observer = new MutationObserver(() => {
-    console.log("✅ Video has loaded, removing placeholder!");
-    removePlaceholder();
-    observer.disconnect();
-  });
+      gsap
+        .timeline()
+        .to(subtitle, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' })
+        .to(
+          title,
+          { opacity: 1, y: 0, duration: 1, ease: 'power2.out' },
+          '-=0.5'
+        )
+        .to(cta, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=2')
 
-  observer.observe(videoFrame, { attributes: true, childList: true, subtree: true });
-
-  // ✅ GSAP Animation (Executed After 1 Second to Ensure Proper Load)
-  setTimeout(() => {
-    gsap.set([subtitle, title, cta], { opacity: 0, y: 40 });
-
-    gsap.timeline()
-    .to(subtitle, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-    .to(title, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5")
-    .to(cta, { opacity: 1, y: 0, duration: 1, ease: "power2.out" },"-=2");
-
-
-    console.log("✅ GSAP animation started!");
-  }, 1000); // Delayed to ensure the DOM is fully ready
-});
-
-
+      console.log('✅ GSAP animation started!')
+    }, 1000) // Delayed to ensure the DOM is fully ready
+  })
 </script>
 
 {/* ✅ Transparent Navbar */}
-<nav class="absolute top-0 left-0 w-full z-10 flex items-center justify-between px-8 py-4 text-white bg-transparent">
+<nav
+  class="absolute top-0 left-0 w-full z-10 flex items-center justify-between px-8 py-8 text-white bg-transparent"
+>
   <div class="flex items-center space-x-4">
-    <img src="/Kuntur_logo.png" alt="Kuntur Logo" class="h-10">
+    <img src="/Kuntur_logo.png" alt="Kuntur Logo" class="h-10" />
   </div>
-  <button class="text-white focus:outline-none">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  </button>
 </nav>
 
 <section class="relative h-screen w-full overflow-hidden z-[1]" id="hero">
   <!-- ✅ Placeholder Image -->
-  <div id="video-placeholder" class="absolute inset-0 flex items-center justify-center bg-black">
-    <img src="/Hero_Section_BackgroundImage_placeholder.webp" alt="Loading Video" class="absolute inset-0 w-full h-full object-cover" />
+  <div
+    id="video-placeholder"
+    class="absolute inset-0 flex items-center justify-center bg-black"
+  >
+    <img
+      src="/Hero_Section_BackgroundImage_placeholder.webp"
+      alt="Loading Video"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
   </div>
 
   <!-- ✅ Background Video (Fixed to Always Cover the Viewport) -->
@@ -109,27 +119,32 @@ document.addEventListener("DOMContentLoaded", function () {
     <iframe
       id="hero-video"
       src="https://player.vimeo.com/video/1043407655?background=1&dnt=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
-      class="absolute 
+      class="absolute
         xl:top-1/2 xl:h-[200%] xl:w-[200%] xl:[aspect-ratio:16/9]
-        top-[calc(50%-4px)] left-1/2 w-[177.77777778vh] min-w-full min-h-[calc(100%+6px)] 
+        top-[calc(50%-4px)] left-1/2 w-[177.77777778vh] min-w-full min-h-[calc(100%+6px)]
         -translate-x-1/2 -translate-y-1/2"
       frameborder="0"
       allow="autoplay; fullscreen"
-      allowfullscreen
-    ></iframe>
+      allowfullscreen></iframe>
   </div>
 
   <!-- ✅ Overlay -->
   <div class="absolute inset-0 bg-black/40"></div>
 
-   <!-- ✅ Hero Content with Fade-in Animation -->
-   <div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
-    <p class="hero-subtitle mb-4 text-center text-xl md:text-2xl text-white opacity-0">
+  <!-- ✅ Hero Content with Fade-in Animation -->
+  <div
+    class="relative z-10 flex h-full flex-col items-center justify-center px-4"
+  >
+    <p
+      class="hero-subtitle mb-4 text-center text-xl md:text-2xl text-white opacity-0"
+    >
       Patagonia sin límites, viajes seguros.
     </p>
-    <h1 class="hero-title mb-10 md:mb-16 text-center text-3xl font-bold text-white md:text-6xl opacity-0">
+    <h1
+      class="hero-title mb-10 md:mb-16 text-center text-3xl font-bold text-white md:text-6xl opacity-0"
+    >
       Explora <br /><span class="font-serif italic">Magallanes</span>
-      <br />con comodidad 
+      <br />con comodidad
       <br /> y confianza
     </h1>
     <button
