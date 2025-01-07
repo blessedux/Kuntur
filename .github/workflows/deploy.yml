@@ -3,7 +3,7 @@ name: Deploy to Docker Hub
 on:
   push:
     branches:
-      - main  # Deploys when pushing to main branch
+      - main  # Deploys only when pushing to the main branch
 
 jobs:
   build-and-push:
@@ -12,18 +12,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
+      - name: Set up QEMU for multi-arch builds
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin || exit 1
+        env:
+          DOCKER_CLI_ACI: 1
 
       - name: Build and Push Multi-Architecture Image
         run: |
-          docker buildx create --use
           docker buildx build --platform linux/amd64,linux/arm64 \
             -t blessedux/kuntur:latest \
             -t blessedux/kuntur:main \
