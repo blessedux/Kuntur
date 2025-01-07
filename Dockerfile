@@ -1,23 +1,28 @@
-# Stage 1: Build the Astro App
+# Build Astro App
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Install dependencies
 COPY puffy-parsec/package.json puffy-parsec/package-lock.json ./
 RUN npm install
 
-# Copy the Astro project files and build the site
+# Copy app files
 COPY puffy-parsec/. ./puffy-parsec/
 WORKDIR /app/puffy-parsec
 RUN npm run build
 
-# Stage 2: Serve the Built Files with Nginx
+# Debug: List files in /app/puffy-parsec to check if dist/ is created
+RUN echo "📂 Checking build output in /app/puffy-parsec" && ls -la /app/puffy-parsec && echo "✅ dist/ folder should be here!"
+
+# Serve with Nginx
 FROM nginx:alpine AS runner
 WORKDIR /usr/share/nginx/html
-COPY --from=builder /app/puffy-parsec/dist .  # ✅ Fixed the path
 
-# Expose port 80 for web traffic
+# Debug: Show available directories before copying
+RUN echo "🛠 Before Copy: Existing directories in nginx container:" && ls -la /usr/share/nginx/html
+
+# Copy built files
+COPY --from=builder /app/puffy-parsec/dist .  
+
 EXPOSE 80
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
