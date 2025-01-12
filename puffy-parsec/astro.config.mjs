@@ -1,11 +1,17 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 
 
 export default defineConfig({
-  integrations: [tailwind(), react()],
+  site: 'https://transferkuntur.cl',
+  integrations: [tailwind(), react(), sitemap({
+    filter: (page) => !page.includes('/private'), // Exclude private pages
+    changefreq: 'weekly', // Set update frequency
+    priority: 0.8, // Set priority (higher = more important)
+  }),],
   vite: {
     server: {
       fs: {
