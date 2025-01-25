@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-const maxLength = 18
+const maxLength = 25
 ---
 
 <!-- Include FontAwesome CDN -->
@@ -15,11 +15,11 @@ const maxLength = 18
   const priceMapping = {
     'Punta Arenas': {
       'Puerto Natales': 336000,
-      'Aeropuerto Puq': 35000,
+      'Aeropuerto Punta Arenas': 35000,
       Ushuaia: 1035000,
       Calafate: 885000,
       'Fuerte Bulnes': 98000,
-      'City tour Puq': 60000,
+      'City tour Punta Arenas': 60000,
       'Reserva Magallanes': 75000
     },
     'Puerto Natales': {
@@ -27,8 +27,8 @@ const maxLength = 18
       Ushuaia: 1371000, // Base price + connection
       Calafate: 1221000, // Base price + connection
       'Fuerte Bulnes': 434000,
-      'Aeropuerto Puq': 371000,
-      'City tour Puq': 396000,
+      'Aeropuerto Punta Arenas': 371000,
+      'City tour Punta Arenas': 396000,
       'Reserva Magallanes': 411000
     },
     Ushuaia: {
@@ -36,8 +36,8 @@ const maxLength = 18
       'Puerto Natales': 1371000,
       Calafate: 885000,
       'Fuerte Bulnes': 1133000,
-      'Aeropuerto Puq': 1070000,
-      'City tour Puq': 1095000,
+      'Aeropuerto Punta Arenas': 1070000,
+      'City tour Punta Arenas': 1095000,
       'Reserva Magallanes': 1110000
     },
     Calafate: {
@@ -45,8 +45,8 @@ const maxLength = 18
       'Puerto Natales': 1221000,
       Ushuaia: 885000,
       'Fuerte Bulnes': 983000,
-      'Aeropuerto Puq': 920000,
-      'City tour Puq': 945000,
+      'Aeropuerto Punta Arenas': 920000,
+      'City tour Punta Arenas': 945000,
       'Reserva Magallanes': 960000
     },
     'Fuerte Bulnes': {
@@ -54,26 +54,26 @@ const maxLength = 18
       'Puerto Natales': 434000,
       Ushuaia: 1133000,
       Calafate: 983000,
-      'Aeropuerto Puq': 133000,
-      'City tour Puq': 158000,
+      'Aeropuerto Punta Arenas': 133000,
+      'City tour Punta Arenas': 158000,
       'Reserva Magallanes': 173000
     },
-    'Aeropuerto Puq': {
+    'Aeropuerto Punta Arenas': {
       'Punta Arenas': 35000,
       'Puerto Natales': 371000,
       Ushuaia: 1070000,
       Calafate: 920000,
       'Fuerte Bulnes': 133000,
-      'City tour Puq': 95000,
+      'City tour Punta Arenas': 95000,
       'Reserva Magallanes': 110000
     },
-    'City tour Puq': {
+    'City tour Punta Arenas': {
       'Punta Arenas': 60000,
       'Puerto Natales': 396000,
       Ushuaia: 1095000,
       Calafate: 945000,
       'Fuerte Bulnes': 158000,
-      'Aeropuerto Puq': 95000,
+      'Aeropuerto Punta Arenas': 95000,
       'Reserva Magallanes': 135000
     },
     'Reserva Magallanes': {
@@ -82,8 +82,8 @@ const maxLength = 18
       Ushuaia: 1110000,
       Calafate: 960000,
       'Fuerte Bulnes': 173000,
-      'Aeropuerto Puq': 110000,
-      'City tour Puq': 135000
+      'Aeropuerto Punta Arenas': 110000,
+      'City tour Punta Arenas': 135000
     }
   }
 
@@ -93,8 +93,8 @@ const maxLength = 18
     Object.keys(priceMapping['Calafate']),
     Object.keys(priceMapping['Puerto Natales']),
     Object.keys(priceMapping['Fuerte Bulnes']),
-    Object.keys(priceMapping['Aeropuerto Puq']),
-    Object.keys(priceMapping['City tour Puq']),
+    Object.keys(priceMapping['Aeropuerto Punta Arenas']),
+    Object.keys(priceMapping['City tour Punta Arenas']),
     Object.keys(priceMapping['Reserva Magallanes'])
   )
 

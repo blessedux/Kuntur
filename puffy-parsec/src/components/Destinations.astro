@@ -26,50 +26,43 @@ const DESTINATIONS = [
     id: 'natales',
     src: '/img/natales.webp',
     alt: 'Natales',
-    caption: 'Puerto Natales',
-    price: '$1899'
+    caption: 'Puerto Natales'
   },
   {
     id: 'calafate',
     src: '/img/calafate.webp',
     alt: 'Calafate',
-    caption: 'El Calafate',
-    price: '$1899'
+    caption: 'El Calafate'
   },
   {
     id: 'ushuaia',
     src: '/img/ushuaia.webp',
     alt: 'Ushuaia',
-    caption: 'Ushuaia, Tierra del Fuego',
-    price: '$1899'
+    caption: 'Ushuaia, Tierra del Fuego'
   },
   {
     id: 'reserva',
     src: '/img/reserva.webp',
     alt: 'Reserva Magallanes',
-    caption: 'Reserva Magallanes',
-    price: '$1899'
+    caption: 'Reserva Magallanes'
   },
   {
     id: 'aeropuerto',
     src: '/img/aeropuerto.webp',
     alt: 'Aeropuerto',
-    caption: 'Aeropuerto Punta Arenas',
-    price: '$1899'
+    caption: 'Aeropuerto Punta Arenas'
   },
   {
     id: 'fuerte-bulnes',
     src: '/img/fuerte-bulnes.webp',
     alt: 'Fuerte Bulnes',
-    caption: 'Fuerte Bulnes',
-    price: '$1899'
+    caption: 'Fuerte Bulnes'
   },
   {
     id: 'punta-arenas',
     src: '/img/punta-arenas.webp',
     alt: 'Punta Arenas',
-    caption: 'Punta Arenas',
-    price: '$1899'
+    caption: 'Punta Arenas'
   }
 ]
 console.log('✅ DESTINATIONS array loaded:', DESTINATIONS)
@@ -125,7 +118,9 @@ console.log('✅ DESTINATIONS array loaded:', DESTINATIONS)
                   {destination.caption}
                 </p>
                 <div class="flex justify-between items-center">
-                  <p class="text-sm text-gray-500">Precio</p>
+                  <p class="text-sm text-gray-500">
+                    Click para calcular Precio
+                  </p>
                   <p class="text-lg font-bold text-gray-800">
                     {destination.price}
                   </p>
