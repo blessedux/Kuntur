@@ -135,6 +135,46 @@ const maxLength = 25
     let origin = originInput.value
     let destination = destinationInput.value
 
+    // Special case for City Tour
+    if (
+      origin === 'City tour Punta Arenas' ||
+      destination === 'City tour Punta Arenas'
+    ) {
+      const price = 60000
+      priceDisplay.textContent = `Precio estimado: $${price.toLocaleString()} CLP`
+      document.getElementById('paxInfo').textContent = '1-4 pax'
+
+      // If City Tour is selected, disable the other input
+      if (origin === 'City tour Punta Arenas') {
+        destinationInput.value = ''
+        destinationInput.disabled = true
+        destinationInput.placeholder = 'No se requiere destino para City Tour'
+      } else if (destination === 'City tour Punta Arenas') {
+        originInput.value = ''
+        originInput.disabled = true
+        originInput.placeholder = 'No se requiere origen para City Tour'
+      }
+
+      // Change submit button to WhatsApp link
+      const submitButton = document.querySelector('button[type="submit"]')
+      submitButton.innerHTML = 'Consultar por WhatsApp'
+      submitButton.onclick = e => {
+        e.preventDefault()
+        const message = encodeURIComponent(
+          'Hola, me interesa el City Tour Punta Arenas para 1-4 personas.'
+        )
+        window.open(`https://wa.me/56961949680?text=${message}`, '_blank')
+      }
+      return
+    }
+
+    // Reset inputs if changing from City Tour to another destination
+    destinationInput.disabled = false
+    originInput.disabled = false
+    const submitButton = document.querySelector('button[type="submit"]')
+    submitButton.innerHTML = 'Reserva tu transporte'
+    submitButton.onclick = null
+
     // Suggest closest valid origin
     const matchedOrigin = findClosestMatch(origin)
     if (
