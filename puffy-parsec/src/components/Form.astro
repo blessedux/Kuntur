@@ -2,7 +2,103 @@
 import { Image } from 'astro:assets'
 ---
 
+<!-- Include FontAwesome CDN -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+
 <script src="/scripts/form.js" defer></script>
+<script>
+  // Price mapping based on origin and destination
+  const priceMapping = {
+    'Punta Arenas': {
+      'Puerto Natales': 336000,
+      'Aeropuerto Puq': 35000,
+      Ushuaia: 1035000,
+      Calafate: 885000,
+      'Fuerte Bulnes': 98000,
+      'City tour Puq': 60000,
+      'Reserva Magallanes': 75000
+    },
+    Ushuaia: {
+      'Punta Arenas': 1035000,
+      Calafate: 885000
+      // Add other reverse routes if needed
+    },
+    Calafate: {
+      'Punta Arenas': 885000,
+      Ushuaia: 885000 // Assuming same price for reverse
+      // Add other reverse routes if needed
+    },
+    'Puerto Natales': {
+      'Punta Arenas': 336000
+      // Add other reverse routes if needed
+    },
+    'Fuerte Bulnes': {
+      'Punta Arenas': 98000
+      // Add other reverse routes if needed
+    },
+    'Aeropuerto Puq': {
+      'Punta Arenas': 35000
+      // Add other reverse routes if needed
+    },
+    'City tour Puq': {
+      'Punta Arenas': 60000
+      // Add other reverse routes if needed
+    },
+    'Reserva Magallanes': {
+      'Punta Arenas': 75000
+      // Add other reverse routes if needed
+    }
+  }
+
+  // List of valid destinations for matching
+  const validDestinations = Object.keys(priceMapping['Punta Arenas']).concat(
+    Object.keys(priceMapping['Ushuaia']),
+    Object.keys(priceMapping['Calafate']),
+    Object.keys(priceMapping['Puerto Natales']),
+    Object.keys(priceMapping['Fuerte Bulnes']),
+    Object.keys(priceMapping['Aeropuerto Puq']),
+    Object.keys(priceMapping['City tour Puq']),
+    Object.keys(priceMapping['Reserva Magallanes'])
+  )
+
+  // Function to update the price display
+  function updatePrice() {
+    const origin = document.getElementById('origin').value
+    let destination = document.getElementById('destination').value
+    const priceDisplay = document.getElementById('priceDisplay')
+
+    // Suggest closest valid destination
+    if (validDestinations.includes(origin)) {
+      const matchedDestination = validDestinations.find(dest =>
+        dest.toLowerCase().startsWith(destination.toLowerCase())
+      )
+      if (matchedDestination) {
+        destination = matchedDestination // Update destination to the matched one
+        document.getElementById('destination').value = matchedDestination // Auto-fill the input
+      }
+    }
+
+    if (priceMapping[origin] && priceMapping[origin][destination]) {
+      const price = priceMapping[origin][destination]
+      priceDisplay.textContent = `Precio estimado: $${price.toLocaleString()} CLP`
+      document.getElementById('paxInfo').textContent = '1-4 pax'
+    } else {
+      priceDisplay.textContent = 'Selecciona un origen y un destino válidos.'
+      document.getElementById('paxInfo').textContent = '' // Clear pax info if invalid
+    }
+  }
+
+  // Add event listeners to update price on input change
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('origin').addEventListener('input', updatePrice)
+    document
+      .getElementById('destination')
+      .addEventListener('input', updatePrice)
+  })
+</script>
 
 <section
   class="py-12 bg-cover bg-center bg-fixed flex flex-col justify-center items-center z-20 min-h-screen px-4"
@@ -42,7 +138,7 @@ import { Image } from 'astro:assets'
           type="text"
           id="origin"
           name="origin"
-          class="w-full border rounded-full p-3 text-gray-400 bg-gray-100 focus:outline-none cursor-not-allowed"
+          class="w-full border rounded-full p-3 text-gray-700 focus:outline-none"
           placeholder="Punta Arenas"
           required
         />
@@ -55,7 +151,7 @@ import { Image } from 'astro:assets'
           type="text"
           id="destination"
           name="destination"
-          class="w-full border rounded-full p-3 text-gray-400 bg-gray-100 focus:outline-none cursor-not-allowed"
+          class="w-full border rounded-full p-3 text-gray-700 focus:outline-none"
           placeholder="Ushuaia"
           required
         />
@@ -70,6 +166,19 @@ import { Image } from 'astro:assets'
           class="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
           required
         />
+      </div>
+
+      <!-- Price Display -->
+      <div
+        id="priceDisplay"
+        class="text-sm font-light text-gray-600 mt-4 bg-gray-200 p-2 rounded-md w-1/1 float-right flex justify-between items-center"
+      >
+        <span>Precio estimado: $0 CLP</span>
+      </div>
+      <div id="paxInfo" class="text-xs text-gray-500 mt-1 flex items-center">
+        <i class="fas fa-user-friends h-4 w-4 mr-1"></i>
+        <!-- FontAwesome passenger icon -->
+        <span>1-4 pax</span>
       </div>
 
       <button

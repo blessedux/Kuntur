@@ -51,12 +51,18 @@ import '../styles/global.css'
     // ✅ Function to Remove Placeholder
     function removePlaceholder() {
       console.log('✅ Video is ready, removing placeholder...')
-      placeholder.classList.add('fade-out')
+      if (placeholder) {
+        placeholder.classList.add('fade-out')
+      }
 
       setTimeout(() => {
-        placeholder.style.display = 'none'
-        videoFrame.style.opacity = '1'
-        videoFrame.style.visibility = 'visible'
+        if (placeholder) {
+          placeholder.style.display = 'none'
+        }
+        if (videoFrame) {
+          videoFrame.style.opacity = '1'
+          videoFrame.style.visibility = 'visible'
+        }
       }, 700) // Small delay for smooth transition
     }
 
