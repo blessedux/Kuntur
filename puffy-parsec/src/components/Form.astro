@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+const maxLength = 18
 ---
 
 <!-- Include FontAwesome CDN -->
@@ -21,35 +22,68 @@ import { Image } from 'astro:assets'
       'City tour Puq': 60000,
       'Reserva Magallanes': 75000
     },
+    'Puerto Natales': {
+      'Punta Arenas': 336000,
+      Ushuaia: 1371000, // Base price + connection
+      Calafate: 1221000, // Base price + connection
+      'Fuerte Bulnes': 434000,
+      'Aeropuerto Puq': 371000,
+      'City tour Puq': 396000,
+      'Reserva Magallanes': 411000
+    },
     Ushuaia: {
       'Punta Arenas': 1035000,
-      Calafate: 885000
-      // Add other reverse routes if needed
+      'Puerto Natales': 1371000,
+      Calafate: 885000,
+      'Fuerte Bulnes': 1133000,
+      'Aeropuerto Puq': 1070000,
+      'City tour Puq': 1095000,
+      'Reserva Magallanes': 1110000
     },
     Calafate: {
       'Punta Arenas': 885000,
-      Ushuaia: 885000 // Assuming same price for reverse
-      // Add other reverse routes if needed
-    },
-    'Puerto Natales': {
-      'Punta Arenas': 336000
-      // Add other reverse routes if needed
+      'Puerto Natales': 1221000,
+      Ushuaia: 885000,
+      'Fuerte Bulnes': 983000,
+      'Aeropuerto Puq': 920000,
+      'City tour Puq': 945000,
+      'Reserva Magallanes': 960000
     },
     'Fuerte Bulnes': {
-      'Punta Arenas': 98000
-      // Add other reverse routes if needed
+      'Punta Arenas': 98000,
+      'Puerto Natales': 434000,
+      Ushuaia: 1133000,
+      Calafate: 983000,
+      'Aeropuerto Puq': 133000,
+      'City tour Puq': 158000,
+      'Reserva Magallanes': 173000
     },
     'Aeropuerto Puq': {
-      'Punta Arenas': 35000
-      // Add other reverse routes if needed
+      'Punta Arenas': 35000,
+      'Puerto Natales': 371000,
+      Ushuaia: 1070000,
+      Calafate: 920000,
+      'Fuerte Bulnes': 133000,
+      'City tour Puq': 95000,
+      'Reserva Magallanes': 110000
     },
     'City tour Puq': {
-      'Punta Arenas': 60000
-      // Add other reverse routes if needed
+      'Punta Arenas': 60000,
+      'Puerto Natales': 396000,
+      Ushuaia: 1095000,
+      Calafate: 945000,
+      'Fuerte Bulnes': 158000,
+      'Aeropuerto Puq': 95000,
+      'Reserva Magallanes': 135000
     },
     'Reserva Magallanes': {
-      'Punta Arenas': 75000
-      // Add other reverse routes if needed
+      'Punta Arenas': 75000,
+      'Puerto Natales': 411000,
+      Ushuaia: 1110000,
+      Calafate: 960000,
+      'Fuerte Bulnes': 173000,
+      'Aeropuerto Puq': 110000,
+      'City tour Puq': 135000
     }
   }
 
@@ -64,25 +98,80 @@ import { Image } from 'astro:assets'
     Object.keys(priceMapping['Reserva Magallanes'])
   )
 
+  // Function to find the closest match
+  function findClosestMatch(input) {
+    if (!input) return null
+    input = input.toLowerCase().trim()
+    // First try exact match
+    const exactMatch = validDestinations.find(
+      dest => dest.toLowerCase() === input
+    )
+    if (exactMatch) return exactMatch
+
+    // Then try starts with
+    const startsWithMatch = validDestinations.find(dest =>
+      dest.toLowerCase().startsWith(input)
+    )
+    if (startsWithMatch) return startsWithMatch
+
+    // Finally try includes
+    return validDestinations.find(dest => dest.toLowerCase().includes(input))
+  }
+
+  // Function to normalize input for price checking
+  function normalizeInput(input, validNames) {
+    if (!input) return null
+    const normalizedInput = input.toLowerCase().trim()
+    return validNames.find(name => name.toLowerCase() === normalizedInput)
+  }
+
   // Function to update the price display
   function updatePrice() {
-    const origin = document.getElementById('origin').value
-    let destination = document.getElementById('destination').value
+    const originInput = document.getElementById('origin')
+    const destinationInput = document.getElementById('destination')
     const priceDisplay = document.getElementById('priceDisplay')
 
-    // Suggest closest valid destination
-    if (validDestinations.includes(origin)) {
-      const matchedDestination = validDestinations.find(dest =>
-        dest.toLowerCase().startsWith(destination.toLowerCase())
-      )
-      if (matchedDestination) {
-        destination = matchedDestination // Update destination to the matched one
-        document.getElementById('destination').value = matchedDestination // Auto-fill the input
-      }
+    // Get the current values
+    let origin = originInput.value
+    let destination = destinationInput.value
+
+    // Suggest closest valid origin
+    const matchedOrigin = findClosestMatch(origin)
+    if (
+      matchedOrigin &&
+      (origin.length % 4 === 0 ||
+        matchedOrigin.toLowerCase() === origin.toLowerCase())
+    ) {
+      originInput.setAttribute('placeholder', matchedOrigin)
+      originInput.value = matchedOrigin
+    } else {
+      originInput.removeAttribute('placeholder')
     }
 
-    if (priceMapping[origin] && priceMapping[origin][destination]) {
-      const price = priceMapping[origin][destination]
+    // Suggest closest valid destination
+    const matchedDestination = findClosestMatch(destination)
+    if (
+      matchedDestination &&
+      (destination.length % 4 === 0 ||
+        matchedDestination.toLowerCase() === destination.toLowerCase())
+    ) {
+      destinationInput.setAttribute('placeholder', matchedDestination)
+      destinationInput.value = matchedDestination
+    } else {
+      destinationInput.removeAttribute('placeholder')
+    }
+
+    // Normalize inputs for price checking
+    const normalizedOrigin = normalizeInput(origin, Object.keys(priceMapping))
+    const normalizedDestination = normalizeInput(destination, validDestinations)
+
+    if (
+      normalizedOrigin &&
+      normalizedDestination &&
+      priceMapping[normalizedOrigin] &&
+      priceMapping[normalizedOrigin][normalizedDestination]
+    ) {
+      const price = priceMapping[normalizedOrigin][normalizedDestination]
       priceDisplay.textContent = `Precio estimado: $${price.toLocaleString()} CLP`
       document.getElementById('paxInfo').textContent = '1-4 pax'
     } else {
@@ -93,10 +182,64 @@ import { Image } from 'astro:assets'
 
   // Add event listeners to update price on input change
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('origin').addEventListener('input', updatePrice)
+    // Function to handle input changes
+    function handleInput(e) {
+      const input = e.target
+      let currentValue = input.value.trim()
+
+      // If we already have an exact match, prevent additional characters
+      const exactMatch = validDestinations.find(
+        dest => dest.toLowerCase() === currentValue.toLowerCase()
+      )
+      if (exactMatch) {
+        input.value = exactMatch
+        e.preventDefault()
+        return
+      }
+
+      // If input length is multiple of 4, find and set the closest match
+      if (currentValue.length % 4 === 0) {
+        const match = findClosestMatch(currentValue)
+        if (match) {
+          input.value = match
+          e.preventDefault()
+          return
+        }
+      }
+
+      // Prevent input from growing beyond 4 characters without a match
+      if (currentValue.length > 4) {
+        input.value = currentValue.substring(0, 4)
+        e.preventDefault()
+        return
+      }
+
+      updatePrice()
+    }
+
+    document.getElementById('origin').addEventListener('input', handleInput)
     document
       .getElementById('destination')
-      .addEventListener('input', updatePrice)
+      .addEventListener('input', handleInput)
+
+    // Add blur (focus lost) event listeners to auto-complete fields
+    document.getElementById('origin').addEventListener('blur', function () {
+      const matchedOrigin = findClosestMatch(this.value)
+      if (matchedOrigin) {
+        this.value = matchedOrigin
+        updatePrice()
+      }
+    })
+
+    document
+      .getElementById('destination')
+      .addEventListener('blur', function () {
+        const matchedDestination = findClosestMatch(this.value)
+        if (matchedDestination) {
+          this.value = matchedDestination
+          updatePrice()
+        }
+      })
   })
 </script>
 
@@ -140,6 +283,7 @@ import { Image } from 'astro:assets'
           name="origin"
           class="w-full border rounded-full p-3 text-gray-700 focus:outline-none"
           placeholder="Punta Arenas"
+          maxlength={maxLength}
           required
         />
       </div>
@@ -153,6 +297,7 @@ import { Image } from 'astro:assets'
           name="destination"
           class="w-full border rounded-full p-3 text-gray-700 focus:outline-none"
           placeholder="Ushuaia"
+          maxlength={maxLength}
           required
         />
       </div>
